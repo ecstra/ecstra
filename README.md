@@ -2,8 +2,6 @@
 <h3 align="center">🌌 A fervent seeker of codes and repositories from the Lands Between</h3>
 
 **Currently focused on:** <br>
-🛡️ Collaborative Quest for Hyper Automation<br>
-🚢 I’m traversing the Sea of Fog, learning Frameworks, Courses from Elden Academy of Code (Deeplearning AI)<br>
 📫 Reach me through the bloodied lake at gotham47g@gmail.com<br>
 🏹 Know about my battles and victories https://www.linkedin.com/in/gautam-s-663661247/<br>
 ⚔️ Elden Fact I've mastered the art of coding, much like a Tarnished mastering the Elden Ring's secrets to reshape the world.
