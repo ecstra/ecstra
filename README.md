@@ -1,60 +1,29 @@
-<br clear="both">
-
-<h1 align="center">I'm just building stuff...</h1>
-
-###
+I'm just building stuff...
 
 <div align="center">
-  <img src="https://cdn.simpleicons.org/rust/f74c00" height="50" alt="rust logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="50" alt="python logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="50" alt="typescript logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="50" alt="javascript logo" />
 
-  <img width="24" />
+<!-- Skills/Tech Stack -->
+<h3>🛠️ Tech Stack</h3>
+<p>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go"/>
+  <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
+</p>
 
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="50" alt="git logo" />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/ubuntu/E95420" height="50" alt="ubuntu logo" />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/docker/2496ED" height="50" alt="docker logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="50" alt="vscode logo" />
+<br/>
 
-  <img width="24" />
+<!-- GitHub Metrics -->
+<img src="https://raw.githubusercontent.com/ecstra/ecstra/main/metrics.svg" width="100%" alt="Metrics" />
 
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" height="50" alt="svelte logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" height="50" alt="fastapi logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height="50" alt="postgresql logo" />
-</div>
+<br/>
 
-###
+<!-- Snake Animation -->
+<img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" />
 
-<div align="center">
-  <a href="https://www.linkedin.com/in/ecstranaut/" target="_blank">
-    <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="linkedin logo"  />
-  </a>
-  <a href="email:gotham47g@gmail.com" target="_blank">
-    <img src="https://img.shields.io/static/v1?message=Gmail&logo=gmail&label=gotham47g&color=D14836&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="gmail logo"  />
-  </a>
-</div>
-
-###
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/metrics.svg" alt="Metrics" width="100%" />
-  
-  <br/>
-  
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/isocalendar.svg" alt="3D Calendar" width="100%" />
-</div>
-
-###
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" width="100%" />
 </div>
