@@ -1,74 +1,27 @@
-name: Generate profile stats
+name: Update README Stats
 
 on:
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Prepare output dir
-        run: mkdir -p dist
-
-      # ----------------------------
-      # GitHub Readme Stats (main + langs)
-      # ----------------------------
-      - name: Generate stats cards
+      - name: Fetch stats
         run: |
-          docker run --rm \
-            -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            -v $PWD/dist:/out \
-            anuraghazra/github-readme-stats:latest \
-            --username ecstra \
-            --output /out/stats.svg
+          mkdir -p assets
+          curl -L "https://github-readme-stats.vercel.app/api?username=ecstra&theme=dracula" -o assets/stats.svg
+          curl -L "https://github-readme-stats.vercel.app/api/top-langs?username=ecstra&layout=compact&theme=dracula" -o assets/langs.svg
+          curl -L "https://streak-stats.demolab.com?user=ecstra&theme=dracula" -o assets/streak.svg
 
-          docker run --rm \
-            -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            -v $PWD/dist:/out \
-            anuraghazra/github-readme-stats:latest \
-            --username ecstra \
-            --top-langs \
-            --output /out/top-langs.svg
-
-      # ----------------------------
-      # Streak stats
-      # ----------------------------
-      - name: Generate streak stats
+      - name: Commit and push
         run: |
-          docker run --rm \
-            -v $PWD/dist:/out \
-            denvercoder1/github-readme-streak-stats \
-            --username ecstra \
-            --output /out/streak.svg
-
-      # ----------------------------
-      # Activity graph
-      # ----------------------------
-      - name: Generate activity graph
-        run: |
-          docker run --rm \
-            -v $PWD/dist:/out \
-            ashutosh00710/github-readme-activity-graph \
-            --username ecstra \
-            --output /out/activity.svg
-
-      # ----------------------------
-      # Publish to output branch
-      # ----------------------------
-      - name: Publish images
-        uses: crazy-max/ghaction-github-pages@v3.1.0
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add assets/
+          git commit -m "Update README stats" || exit 0
+          git push
