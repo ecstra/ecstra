@@ -1,1 +1,126 @@
+name: Generate Reliable GitHub Graphs
 
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-graphs:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create graphs directory
+        run: mkdir -p dist/graphs
+
+      - name: Generate GitHub Stats
+        id: stats
+        continue-on-error: true
+        run: |
+          # Try to fetch stats from multiple sources
+          STATS_URL="https://github-readme-stats.vercel.app/api?username=${{ github.repository_owner }}&show_icons=true&theme=dark&hide_border=true&count_private=true&include_all_commits=true"
+          
+          curl -f -o dist/graphs/stats.svg "$STATS_URL" || \
+          curl -f -o dist/graphs/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=${{ github.repository_owner }}&show_icons=true&theme=dark&hide_border=true&count_private=true" || \
+          echo "Stats generation failed, will use previous version"
+
+      - name: Generate Top Languages
+        id: languages
+        continue-on-error: true
+        run: |
+          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=${{ github.repository_owner }}&layout=compact&theme=dark&hide_border=true&langs_count=8"
+          
+          curl -f -o dist/graphs/languages.svg "$LANG_URL" || \
+          curl -f -o dist/graphs/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=${{ github.repository_owner }}&layout=compact&theme=dark&hide_border=true" || \
+          echo "Languages generation failed, will use previous version"
+
+      - name: Generate Streak Stats
+        id: streak
+        continue-on-error: true
+        run: |
+          STREAK_URL="https://streak-stats.demolab.com/?user=${{ github.repository_owner }}&theme=dark&hide_border=true"
+          
+          curl -f -o dist/graphs/streak.svg "$STREAK_URL" || \
+          curl -f -o dist/graphs/streak.svg "https://github-readme-streak-stats.herokuapp.com/?user=${{ github.repository_owner }}&theme=dark&hide_border=true" || \
+          echo "Streak generation failed, will use previous version"
+
+      - name: Generate snake animation
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: dist/graphs/snake.svg?palette=github-dark
+
+      - name: Create metadata file
+        run: |
+          cat > dist/graphs/metadata.json << EOF
+          {
+            "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "stats_status": "${{ steps.stats.outcome }}",
+            "languages_status": "${{ steps.languages.outcome }}",
+            "streak_status": "${{ steps.streak.outcome }}",
+            "commit_sha": "${{ github.sha }}"
+          }
+          EOF
+
+      - name: Fetch previous versions if current failed
+        continue-on-error: true
+        run: |
+          git fetch origin output:output-branch || true
+          
+          # If new stats failed, copy old one
+          if [ ! -f dist/graphs/stats.svg ] || [ ! -s dist/graphs/stats.svg ]; then
+            git show output-branch:graphs/stats.svg > dist/graphs/stats.svg 2>/dev/null || echo "No previous stats found"
+          fi
+          
+          # If new languages failed, copy old one
+          if [ ! -f dist/graphs/languages.svg ] || [ ! -s dist/graphs/languages.svg ]; then
+            git show output-branch:graphs/languages.svg > dist/graphs/languages.svg 2>/dev/null || echo "No previous languages found"
+          fi
+          
+          # If new streak failed, copy old one
+          if [ ! -f dist/graphs/streak.svg ] || [ ! -s dist/graphs/streak.svg ]; then
+            git show output-branch:graphs/streak.svg > dist/graphs/streak.svg 2>/dev/null || echo "No previous streak found"
+          fi
+
+      - name: Verify all files exist
+        run: |
+          echo "Checking generated files..."
+          ls -lh dist/graphs/
+          
+          # Create placeholder if any file is missing
+          for file in stats languages streak snake; do
+            if [ ! -f "dist/graphs/${file}.svg" ] || [ ! -s "dist/graphs/${file}.svg" ]; then
+              echo "Creating placeholder for ${file}.svg"
+              cat > "dist/graphs/${file}.svg" << 'EOF'
+          <svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="100" fill="#0d1117"/>
+            <text x="200" y="50" font-family="Arial" font-size="16" fill="#c9d1d9" text-anchor="middle">
+              Graph temporarily unavailable
+            </text>
+          </svg>
+          EOF
+            fi
+          done
+
+      - name: Deploy to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist/graphs
+          commit_message: "Update graphs - ${{ steps.stats.outcome }}/${{ steps.languages.outcome }}/${{ steps.streak.outcome }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
