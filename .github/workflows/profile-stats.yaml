@@ -31,30 +31,30 @@ jobs:
         id: stats
         continue-on-error: true
         run: |
-          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=0d1117&title_color=f15a24&text_color=e6edf3&icon_color=f15a24"
+          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=070a0f&title_color=f15a24&text_color=e6edf3&icon_color=f15a24"
 
           curl -f -o dist/stats.svg "$STATS_URL" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=0d1117&title_color=f15a24&text_color=e6edf3&icon_color=f15a24" || \
+          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=070a0f&title_color=f15a24&text_color=e6edf3&icon_color=f15a24" || \
           echo "Stats generation failed, will use previous version"
 
       - name: Generate Top Languages
         id: languages
         continue-on-error: true
         run: |
-          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=0d1117&title_color=f15a24&text_color=e6edf3"
+          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=070a0f&title_color=f15a24&text_color=e6edf3"
 
           curl -f -o dist/languages.svg "$LANG_URL" || \
-          curl -f -o dist/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=0d1117&title_color=f15a24&text_color=e6edf3" || \
+          curl -f -o dist/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=070a0f&title_color=f15a24&text_color=e6edf3" || \
           echo "Languages generation failed, will use previous version"
 
       - name: Generate Streak Stats
         id: streak
         continue-on-error: true
         run: |
-          STREAK_URL="https://streak-stats.demolab.com/?user=ecstra&hide_border=true&background=0d1117&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3"
+          STREAK_URL="https://streak-stats.demolab.com/?user=ecstra&hide_border=true&background=070a0f&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3"
 
           curl -f -o dist/streak.svg "$STREAK_URL" || \
-          curl -f -o dist/streak.svg "https://nirzak-streak-stats.vercel.app/?user=ecstra&hide_border=true&background=0d1117&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3" || \
+          curl -f -o dist/streak.svg "https://nirzak-streak-stats.vercel.app/?user=ecstra&hide_border=true&background=070a0f&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3" || \
           echo "Streak generation failed, will use previous version"
 
       - name: Generate snake animation
@@ -113,7 +113,7 @@ jobs:
             if [ ! -f "dist/${file}.svg" ]; then
               cat > "dist/${file}.svg" <<'PLACEHOLDER'
           <svg width="495" height="195" viewBox="0 0 495 195" xmlns="http://www.w3.org/2000/svg">
-            <rect width="495" height="195" fill="#0d1117" rx="8"/>
+            <rect width="495" height="195" fill="#070a0f" rx="8"/>
             <text x="247.5" y="95" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" fill="#f15a24" text-anchor="middle" font-weight="600">Graph temporarily unavailable</text>
             <text x="247.5" y="125" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="#9da5b4" text-anchor="middle">Will retry in a few hours</text>
           </svg>
