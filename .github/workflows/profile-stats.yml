@@ -1,0 +1,27 @@
+name: Update README Stats
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch stats
+        run: |
+          mkdir -p assets
+          curl -L "https://github-readme-stats.vercel.app/api?username=ecstra&theme=dracula" -o assets/stats.svg
+          curl -L "https://github-readme-stats.vercel.app/api/top-langs?username=ecstra&layout=compact&theme=dracula" -o assets/langs.svg
+          curl -L "https://streak-stats.demolab.com?user=ecstra&theme=dracula" -o assets/streak.svg
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add assets/
+          git commit -m "Update README stats" || exit 0
+          git push
