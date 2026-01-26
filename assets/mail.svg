@@ -1,0 +1,10 @@
+<svg width="220" height="56" viewBox="0 0 220 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="220" height="56" rx="14" fill="#111111"/>
+  <g transform="translate(18,16)" fill="white">
+    <path d="M2 4h20v16H2z" fill="none" stroke="white" stroke-width="2"/>
+    <path d="M2 4l10 8 10-8" fill="none" stroke="white" stroke-width="2"/>
+  </g>
+  <text x="70" y="36" font-size="20" font-family="Inter, system-ui, sans-serif" fill="white" font-weight="600">
+    Email
+  </text>
+</svg>
