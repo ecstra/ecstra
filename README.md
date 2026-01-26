@@ -1,6 +1,14 @@
 <br clear="both">
 
-<h1 align="center">I'm just building stuff...</h1>
+<p align="center">
+  <img
+    src="https://yt3.googleusercontent.com/FCKMcPBAZlb7aMQB4HsGZHDJQlFB85xTr37XXsyXyHtH6GjVGAxB_trsc8RfEIDEccrS1RZ1WA=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
+    style="border-radius: 18px;"
+    alt="Banner"
+  />
+</p>
+
+<br>
 
 ###
 
@@ -62,17 +70,24 @@
 
 </div>
 
+<br>
+
 ###
 
 <p align="center">
-  <a href="https://www.linkedin.com/in/ecstranaut/">
+  <a 
+    href="https://www.linkedin.com/in/ecstranaut/"
+    style="text-decoration: none;"
+  >
     <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/linkedin.svg" />
   </a>
-  <a href="mailto:gotham47g@gmail.com">
+  <a 
+    href="mailto:gotham47g@gmail.com"
+    style="text-decoration: none;"
+  >
     <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/mail.svg" />
   </a>
 </p>
-
 
 ###
 
@@ -93,6 +108,8 @@
 
 ###
 
-<img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" />
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" />
+</div>
 
 ###
