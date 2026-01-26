@@ -31,11 +31,11 @@ jobs:
         id: stats
         continue-on-error: true
         run: |
-          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true&bg_color=0d1117&title_color=58a6ff&text_color=c9d1d9&icon_color=58a6ff"
+          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=github_dark&hide_border=true&count_private=true&include_all_commits=true&bg_color=0d1117&title_color=58a6ff&text_color=c9d1d9&icon_color=58a6ff"
           
           curl -f -o dist/stats.svg "$STATS_URL" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=dark&hide_border=true&count_private=true&include_all_commits=true" || \
+          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=github_dark&hide_border=true&count_private=true&include_all_commits=true" || \
+          curl -f -o dist/stats.svg "https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=github_dark&hide_border=true&count_private=true&include_all_commits=true" || \
           echo "Stats generation failed, will use previous version"
 
       - name: Generate Top Languages
