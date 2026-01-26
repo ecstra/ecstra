@@ -31,11 +31,11 @@ jobs:
         id: stats
         continue-on-error: true
         run: |
-          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&include_all_commits=true&hide=c"
+          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide=c&rank_icon=github"
           
           curl -f -o dist/stats.svg "$STATS_URL" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&include_all_commits=true&hide=c" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=dark&hide_border=true&count_private=true&include_all_commits=true&hide=c" || \
+          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide=c" || \
+          curl -f -o dist/stats.svg "https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=dark&hide_border=true&hide=c" || \
           echo "Stats generation failed, will use previous version"
 
       - name: Generate Top Languages
@@ -90,6 +90,14 @@ jobs:
             else
               echo "No previous stats found, will create placeholder"
               rm -f dist/stats.svg
+            fi
+          fi
+          
+          if [ -f dist/stats.svg ] && [ $(wc -c < dist/stats.svg) -lt 1000 ]; then
+            echo "Stats.svg is suspiciously small, checking for previous version..."
+            if git show output-branch:stats.svg > /tmp/old_stats.svg 2>/dev/null && [ $(wc -c < /tmp/old_stats.svg) -gt 1000 ]; then
+              echo "Using previous stats.svg (current one appears broken)"
+              mv /tmp/old_stats.svg dist/stats.svg
             fi
           fi
           
