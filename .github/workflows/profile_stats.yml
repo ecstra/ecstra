@@ -17,23 +17,56 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Clone stats generator
-        run: |
-          git clone https://github.com/anuraghazra/github-readme-stats
-          cd github-readme-stats
-          npm install
+      - name: Prepare output dir
+        run: mkdir -p dist
 
-      - name: Generate images
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # ----------------------------
+      # GitHub Readme Stats (main + langs)
+      # ----------------------------
+      - name: Generate stats cards
         run: |
-          cd github-readme-stats
-          mkdir -p ../dist
-          node src/render.js ecstra --output ../dist/stats.svg
-          node src/render.js ecstra --top-langs --output ../dist/top-langs.svg
+          docker run --rm \
+            -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            -v $PWD/dist:/out \
+            anuraghazra/github-readme-stats:latest \
+            --username ecstra \
+            --output /out/stats.svg
 
-      - name: Publish to output branch
-        uses: crazy-max/ghaction-github-pages@v3
+          docker run --rm \
+            -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            -v $PWD/dist:/out \
+            anuraghazra/github-readme-stats:latest \
+            --username ecstra \
+            --top-langs \
+            --output /out/top-langs.svg
+
+      # ----------------------------
+      # Streak stats
+      # ----------------------------
+      - name: Generate streak stats
+        run: |
+          docker run --rm \
+            -v $PWD/dist:/out \
+            denvercoder1/github-readme-streak-stats \
+            --username ecstra \
+            --output /out/streak.svg
+
+      # ----------------------------
+      # Activity graph
+      # ----------------------------
+      - name: Generate activity graph
+        run: |
+          docker run --rm \
+            -v $PWD/dist:/out \
+            ashutosh00710/github-readme-activity-graph \
+            --username ecstra \
+            --output /out/activity.svg
+
+      # ----------------------------
+      # Publish to output branch
+      # ----------------------------
+      - name: Publish images
+        uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: output
           build_dir: dist
