@@ -1,0 +1,41 @@
+name: Generate profile stats
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone stats generator
+        run: |
+          git clone https://github.com/anuraghazra/github-readme-stats
+          cd github-readme-stats
+          npm install
+
+      - name: Generate images
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd github-readme-stats
+          mkdir -p ../dist
+          node src/render.js ecstra --output ../dist/stats.svg
+          node src/render.js ecstra --top-langs --output ../dist/top-langs.svg
+
+      - name: Publish to output branch
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
