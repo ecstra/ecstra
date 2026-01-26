@@ -75,16 +75,13 @@
 ###
 
 <p align="center">
-  <a 
-    href="https://www.linkedin.com/in/ecstranaut/"
-    style="text-decoration: none;"
-  >
+  <a href="https://www.linkedin.com/in/ecstranaut/">
     <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/linkedin.svg" />
   </a>
-  <a 
-    href="mailto:gotham47g@gmail.com"
-    style="text-decoration: none;"
-  >
+
+  <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/sep.svg" />
+
+  <a href="mailto:gotham47g@gmail.com">
     <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/mail.svg" />
   </a>
 </p>
