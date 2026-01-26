@@ -27,28 +27,30 @@ jobs:
       - name: Create graphs directory
         run: mkdir -p dist
 
+      # --- 1. GITHUB STATS ---
+      # FIX: Changed '&hide=c' to '&hide_rank=true'
       - name: Generate GitHub Stats
         id: stats
         continue-on-error: true
         run: |
-          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide=c&rank_icon=github"
+          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide_rank=true"
           
           curl -f -o dist/stats.svg "$STATS_URL" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide=c" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&theme=dark&hide_border=true&hide=c" || \
-          echo "Stats generation failed, will use previous version"
+          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&theme=radical&hide_border=true&count_private=true&hide_rank=true" || \
+          echo "Stats generation failed"
 
+      # --- 2. TOP LANGUAGES ---
       - name: Generate Top Languages
         id: languages
         continue-on-error: true
         run: |
-          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&theme=radical&hide_border=true&langs_count=8&hide=c"
+          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&theme=radical&hide_border=true&langs_count=8"
           
           curl -f -o dist/languages.svg "$LANG_URL" || \
-          curl -f -o dist/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ecstra&layout=compact&theme=radical&hide_border=true&langs_count=8&hide=c" || \
-          curl -f -o dist/languages.svg "https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&theme=dark&hide_border=true&langs_count=8&hide=c" || \
-          echo "Languages generation failed, will use previous version"
+          curl -f -o dist/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ecstra&layout=compact&theme=radical&hide_border=true&langs_count=8" || \
+          echo "Languages generation failed"
 
+      # --- 3. STREAK STATS ---
       - name: Generate Streak Stats
         id: streak
         continue-on-error: true
@@ -57,104 +59,87 @@ jobs:
           
           curl -f -o dist/streak.svg "$STREAK_URL" || \
           curl -f -o dist/streak.svg "https://github-readme-streak-stats.herokuapp.com/?user=ecstra&theme=radical&hide_border=true" || \
-          curl -f -o dist/streak.svg "https://nirzak-streak-stats.vercel.app/?user=ecstra&theme=radical&hide_border=true" || \
-          echo "Streak generation failed, will use previous version"
+          echo "Streak generation failed"
 
+      # --- 4. SNAKE ANIMATION ---
       - name: Generate snake animation
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ecstra
           outputs: dist/snake.svg?palette=github-dark
 
-      - name: Create metadata file
-        run: |
-          cat > dist/metadata.json << EOF
-          {
-            "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "stats_status": "${{ steps.stats.outcome }}",
-            "languages_status": "${{ steps.languages.outcome }}",
-            "streak_status": "${{ steps.streak.outcome }}",
-            "commit_sha": "${{ github.sha }}"
-          }
-          EOF
-
-      - name: Fetch previous versions if current failed
+      # --- 5. SAFETY CHECKS (The "Reliable" Logic) ---
+      - name: Verify and Restore Previous Versions
         continue-on-error: true
         run: |
           git fetch origin output:output-branch || true
           
-          if [ ! -f dist/stats.svg ] || [ ! -s dist/stats.svg ]; then
-            echo "Stats generation failed, checking for previous version..."
-            if git show output-branch:stats.svg > dist/stats.svg 2>/dev/null && [ -s dist/stats.svg ]; then
-              echo "Using previous stats.svg"
-            else
-              echo "No previous stats found, will create placeholder"
-              rm -f dist/stats.svg
+          # Helper function to check validity and restore if needed
+          check_and_restore() {
+            local file=$1
+            local min_size=$2
+            
+            # Condition 1: File doesn't exist or is empty
+            if [ ! -f "dist/$file" ] || [ ! -s "dist/$file" ]; then
+              echo "MISSING: $file is missing. Attempting restore..."
+              git show output-branch:$file > "dist/$file" 2>/dev/null || echo "  -> No previous version found."
+              return
             fi
-          fi
-          
-          if [ -f dist/stats.svg ] && [ $(wc -c < dist/stats.svg) -lt 1000 ]; then
-            echo "Stats.svg is suspiciously small, checking for previous version..."
-            if git show output-branch:stats.svg > /tmp/old_stats.svg 2>/dev/null && [ $(wc -c < /tmp/old_stats.svg) -gt 1000 ]; then
-              echo "Using previous stats.svg (current one appears broken)"
-              mv /tmp/old_stats.svg dist/stats.svg
-            fi
-          fi
-          
-          if [ ! -f dist/languages.svg ] || [ ! -s dist/languages.svg ]; then
-            echo "Languages generation failed, checking for previous version..."
-            if git show output-branch:languages.svg > dist/languages.svg 2>/dev/null && [ -s dist/languages.svg ]; then
-              echo "Using previous languages.svg"
-            else
-              echo "No previous languages found, will create placeholder"
-              rm -f dist/languages.svg
-            fi
-          fi
-          
-          if [ ! -f dist/streak.svg ] || [ ! -s dist/streak.svg ]; then
-            echo "Streak generation failed, checking for previous version..."
-            if git show output-branch:streak.svg > dist/streak.svg 2>/dev/null && [ -s dist/streak.svg ]; then
-              echo "Using previous streak.svg"
-            else
-              echo "No previous streak found, will create placeholder"
-              rm -f dist/streak.svg
-            fi
-          fi
 
-      - name: Verify all files exist
-        run: |
-          echo "Checking generated files..."
-          ls -lh dist/
+            # Condition 2: File exists but is too small (likely an error message SVG)
+            local size=$(wc -c < "dist/$file")
+            if [ $size -lt $min_size ]; then
+              echo "BROKEN: $file is too small ($size bytes). Likely an error SVG. Attempting restore..."
+              # Try to restore into a temp file first
+              if git show output-branch:$file > "dist/${file}.tmp" 2>/dev/null; then
+                 # Only overwrite if the old one is actually valid/larger
+                 if [ $(wc -c < "dist/${file}.tmp") -gt $min_size ]; then
+                    mv "dist/${file}.tmp" "dist/$file"
+                    echo "  -> Restored previous valid version."
+                 else
+                    rm "dist/${file}.tmp"
+                    echo "  -> Previous version was also broken/missing."
+                 fi
+              else
+                 echo "  -> No previous version found to restore."
+              fi
+            else
+              echo "OK: $file seems valid ($size bytes)."
+            fi
+          }
+
+          # Check Stats (Fail if < 1KB)
+          check_and_restore "stats.svg" 1000
           
+          # Check Languages (Fail if < 600 bytes)
+          check_and_restore "languages.svg" 600
+          
+          # Check Streak (Fail if < 800 bytes)
+          check_and_restore "streak.svg" 800
+          
+          # Check Snake (Fail if < 2KB)
+          check_and_restore "snake.svg" 2000
+
+      # --- 6. FINAL PLACEHOLDERS (Last Resort) ---
+      - name: Ensure No Broken Links
+        run: |
           for file in stats languages streak; do
-            if [ ! -f "dist/${file}.svg" ]; then
-              echo "No current or previous version found for ${file}.svg - creating placeholder"
-              cat > "dist/${file}.svg" <<'PLACEHOLDER'
-          <svg width="495" height="195" viewBox="0 0 495 195" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ff006e;stop-opacity:0.1" />
-                <stop offset="100%" style="stop-color:#8338ec;stop-opacity:0.05" />
-              </linearGradient>
-            </defs>
-            <rect width="495" height="195" fill="#0d1117" rx="4.5"/>
-            <rect width="495" height="195" fill="url(#grad)" rx="4.5"/>
-            <text x="247.5" y="85" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="18" fill="#ff006e" text-anchor="middle" font-weight="600">Graph temporarily unavailable</text>
-            <text x="247.5" y="115" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="14" fill="#8b949e" text-anchor="middle">Will retry in a few hours</text>
+            if [ ! -f "dist/${file}.svg" ] || [ ! -s "dist/${file}.svg" ]; then
+              echo "Creating placeholder for ${file}.svg"
+              cat > "dist/${file}.svg" <<'EOF'
+          <svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="100" fill="#0d1117"/>
+            <text x="200" y="50" font-family="Arial" font-size="16" fill="#c9d1d9" text-anchor="middle">Graph temporarily unavailable</text>
           </svg>
-          PLACEHOLDER
+          EOF
             fi
           done
-          
-          if [ ! -f "dist/snake.svg" ]; then
-            echo "ERROR: Snake animation failed to generate!"
-          fi
 
       - name: Deploy to output branch
         uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: dist
-          commit_message: "Update graphs - ${{ steps.stats.outcome }}/${{ steps.languages.outcome }}/${{ steps.streak.outcome }}"
+          commit_message: "Update graphs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
