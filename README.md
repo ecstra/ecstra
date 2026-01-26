@@ -5,54 +5,32 @@
 ###
 
 <div align="center">
-  <!-- Languages -->
-  <img src="https://cdn.simpleicons.org/rust/f74c00" height="60" alt="rust logo" />
+  <img src="https://cdn.simpleicons.org/rust/f74c00" height="50" alt="rust logo" />
   <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="60" alt="python logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="50" alt="python logo" />
   <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="60" alt="typescript logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="50" alt="typescript logo" />
   <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="60" alt="javascript logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="50" alt="javascript logo" />
 
   <img width="24" />
 
-  <!-- Systems / Tools -->
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="60" alt="git logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="50" alt="git logo" />
   <img width="12" />
-  <img src="https://cdn.simpleicons.org/ubuntu/E95420" height="60" alt="ubuntu logo" />
+  <img src="https://cdn.simpleicons.org/ubuntu/E95420" height="50" alt="ubuntu logo" />
   <img width="12" />
-  <img src="https://cdn.simpleicons.org/gnubash/4EAA25" height="60" alt="bash logo" />
+  <img src="https://cdn.simpleicons.org/docker/2496ED" height="50" alt="docker logo" />
   <img width="12" />
-  <img src="https://cdn.simpleicons.org/docker/2496ED" height="60" alt="docker logo" />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/raspberrypi/A22846" height="60" alt="raspberrypi logo" />
-  <img width="12" />
-  <img src="https://cdn.simpleicons.org/arduino/00979D" height="60" alt="arduino logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="60" alt="vscode logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="50" alt="vscode logo" />
 
   <img width="24" />
 
-  <!-- Frontend -->
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="60" alt="html5 logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" height="50" alt="svelte logo" />
   <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="60" alt="css logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" height="50" alt="fastapi logo" />
   <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" height="60" alt="svelte logo" />
-
-  <img width="24" />
-
-  <!-- Backend / DB -->
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" height="60" alt="fastapi logo" />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height="60" alt="postgresql logo" />
-
-  <img width="24" />
-
-  <!-- ML -->
-  <img src="https://cdn.simpleicons.org/pytorch/EE4C2C" height="60" alt="pytorch logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height="50" alt="postgresql logo" />
 </div>
-
 
 ###
 
@@ -67,28 +45,16 @@
 
 ###
 
-<br clear="both">
-
-
-
 <div align="center">
-  <!-- <img src="https://github-readme-stats.vercel.app/api/top-langs?username=ecstra&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=dracula&hide_border=false&order=2" height="150" alt="languages graph"  />
-  <img src="https://streak-stats.demolab.com?user=ecstra&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph"  />
-  <img src="https://github-profile-trophy.vercel.app?username=ecstra&theme=dracula&column=-1&row=1&margin-w=8&margin-h=8&no-bg=false&no-frame=false&order=4" height="150" alt="trophy graph"  />
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=ecstra&radius=16&theme=dracula&area=true&order=5" height="300" alt="activity-graph graph"  /> -->
+  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/metrics.svg" alt="Metrics" width="100%" />
   
-  <!-- GitHub Stats -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/stats.svg" alt="GitHub Stats" />
+  <br/>
   
-  <!-- Top Languages -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/languages.svg" alt="Top Languages" />
-  
-  <!-- GitHub Streak -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/streak.svg" alt="GitHub Streak" />
+  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/isocalendar.svg" alt="3D Calendar" width="100%" />
 </div>
 
 ###
 
-<img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" />
-
-###
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" width="100%" />
+</div>
