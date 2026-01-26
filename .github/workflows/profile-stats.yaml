@@ -1,4 +1,4 @@
-name: GitHub Metrics
+name: Generate Cool Metrics
 
 on:
   schedule:
@@ -9,66 +9,77 @@ on:
       - main
 
 jobs:
-  github-metrics:
-    runs-on: ubuntu-latest
+  generate-metrics:
     permissions:
       contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
     steps:
-      - uses: lowlighter/metrics@latest
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create dist directory
+        run: mkdir -p dist
+
+      # --- GRAPH 1: Main Stats ---
+      # I removed 'continue-on-error' so we can see the real error in logs
+      - name: Generate Main Metrics
+        uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics.svg
+          output_action: none
+          committer_branch: output
           user: ecstra
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: Asia/Kolkata
-          config_display: large
-          config_padding: 0, 8 + 11%
-          
-          # ==================
-          # Isometric Calendar
-          # ==================
+          theme: night
+          plugin_languages: yes
+          plugin_languages_sections: most-used
+          plugin_languages_details: lines, percentage
+          plugin_habits: yes
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+
+      - name: Move Main Metrics to dist
+        run: mv metrics.svg dist/metrics.svg
+
+      # --- GRAPH 2: 3D Isometric Calendar ---
+      - name: Generate Isometric Calendar
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: isocalendar.svg
+          output_action: none
+          user: ecstra
+          template: classic
+          base: "" 
+          config_timezone: Asia/Kolkata
+          theme: night
           plugin_isocalendar: yes
           plugin_isocalendar_duration: half-year
-          
-          # ==================
-          # Languages
-          # ==================
-          plugin_languages: yes
-          plugin_languages_ignored: html, css, scss
-          plugin_languages_limit: 8
-          plugin_languages_threshold: 0%
-          plugin_languages_colors: "0:00ADD8, 1:3178C6, 2:F7DF1E, 3:E34C26, 4:563D7C"
-          plugin_languages_sections: most-used
-          plugin_languages_details: bytes-size, percentage
-          plugin_languages_indepth: no
-          
-          # ==================
-          # Notable Contributions  
-          # ==================
-          plugin_notable: yes
-          plugin_notable_from: organization
-          plugin_notable_types: commit
-          plugin_notable_indepth: yes
-          
-          # ==================
-          # Activity
-          # ==================
-          plugin_activity: yes
-          plugin_activity_limit: 4
-          plugin_activity_days: 14
-          plugin_activity_filter: all
-          plugin_activity_visibility: all
-          
-          # ==================
-          # Stars
-          # ==================
-          plugin_stars: yes
-          plugin_stars_limit: 3
-          
-          # ==================  
-          # Topics (your skill icons!)
-          # ==================
-          plugin_topics: yes
-          plugin_topics_mode: icons
-          plugin_topics_limit: 0
-          plugin_topics_sort: stars
+
+      - name: Move Calendar to dist
+        run: mv isocalendar.svg dist/isocalendar.svg
+
+      # --- GRAPH 3: Snake Animation ---
+      - name: Generate snake animation
+        uses: Platane/snk/svg-only@v3
+        id: snake
+        with:
+          github_user_name: ecstra
+          outputs: dist/snake.svg?palette=github-dark
+
+      # --- DEPLOY ---
+      - name: Deploy to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: "Update metrics graphs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
