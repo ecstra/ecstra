@@ -2,7 +2,7 @@
 
 <p align="center">
   <img
-    src="https://yt3.googleusercontent.com/FCKMcPBAZlb7aMQB4HsGZHDJQlFB85xTr37XXsyXyHtH6GjVGAxB_trsc8RfEIDEccrS1RZ1WA=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
+    src="https://github.com/user-attachments/assets/2b9e2bbf-cc2e-4d94-b51b-e92be791c5aa"
     style="border-radius: 18px;"
     alt="Banner"
   />
