@@ -75,15 +75,9 @@
 ###
 
 <p align="center">
-  <a href="https://www.linkedin.com/in/ecstranaut/">
-    <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/linkedin.svg" />
-  </a>
-
+  <a href="https://www.linkedin.com/in/ecstranaut/"><img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/linkedin.svg" /></a>
   <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/sep.svg" />
-
-  <a href="mailto:gotham47g@gmail.com">
-    <img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/mail.svg" />
-  </a>
+  <a href="mailto:gotham47g@gmail.com"><img height="40" src="https://raw.githubusercontent.com/ecstra/ecstra/refs/heads/main/assets/mail.svg" /></a>
 </p>
 
 ###
@@ -92,14 +86,8 @@
 
 <div align="center">
 
-  <!-- GitHub Stats -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/stats.svg" alt="GitHub Stats" />
-
-  <!-- Top Languages -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/languages.svg" alt="Top Languages" />
-
-  <!-- GitHub Streak -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/streak.svg" alt="GitHub Streak" />
+  <!-- GitHub Stats Monolith  -->
+  <img src="https://github.com/user-attachments/assets/0b60ba67-d166-458b-9cd2-4e2afd7e74b8" alt="GitHub Stats" />
 
 </div>
 
@@ -108,5 +96,3 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/snake.svg" alt="Snake animation" />
 </div>
-
-###
