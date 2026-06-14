@@ -85,10 +85,12 @@
 <br clear="both">
 
 <div align="center">
-
-  <!-- GitHub Stats Monolith  -->
-  <img src="https://raw.githubusercontent.com/ecstra/ecstra/output/stats.svg" alt="GitHub Stats" />
-
+  <a href="https://github.com/ecstra/github-readme-stats">
+    <picture>
+      <source media="(max-width: 800px)" srcset="https://raw.githubusercontent.com/ecstra/ecstra/output/stats-mobile.svg">
+      <img alt="ecstra's GitHub Stats" src="https://raw.githubusercontent.com/ecstra/ecstra/output/stats.svg" width="100%">
+    </picture>
+  </a>
 </div>
 
 ###
