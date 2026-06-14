@@ -2,7 +2,7 @@ name: Generate Reliable GitHub Graphs
 
 on:
   schedule:
-    - cron: "0 */23 * * *"
+    - cron: "0 0 * * *" # Runs every 24 hours at midnight UTC
   workflow_dispatch:
   push:
     branches:
@@ -19,43 +19,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Create graphs directory
         run: mkdir -p dist
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: master # Uses the latest nightly to match your local 0.16.0+
+
+      - name: Checkout custom stats generator
+        uses: actions/checkout@v4
+        with:
+          repository: ecstra/github-readme-stats
+          ref: main # Make sure you've merged the 'anuraghazra-theme' branch to main!
+          path: stats-generator
 
       - name: Generate GitHub Stats
         id: stats
         continue-on-error: true
+        env:
+          # Create a repository secret named STATS_TOKEN with a Personal Access Token
+          GITHUB_TOKEN: ${{ secrets.STATS_TOKEN }}
         run: |
-          STATS_URL="https://github-readme-stats.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=070a0f&title_color=f15a24&text_color=e6edf3&icon_color=f15a24"
-
-          curl -f -o dist/stats.svg "$STATS_URL" || \
-          curl -f -o dist/stats.svg "https://github-readme-stats-sigma-five.vercel.app/api?username=ecstra&show_icons=true&count_private=true&hide_border=true&rank_icon=github&bg_color=070a0f&title_color=f15a24&text_color=e6edf3&icon_color=f15a24" || \
-          echo "Stats generation failed, will use previous version"
-
-      - name: Generate Top Languages
-        id: languages
-        continue-on-error: true
-        run: |
-          LANG_URL="https://github-readme-stats.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=070a0f&title_color=f15a24&text_color=e6edf3"
-
-          curl -f -o dist/languages.svg "$LANG_URL" || \
-          curl -f -o dist/languages.svg "https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=ecstra&layout=compact&hide_border=true&langs_count=8&bg_color=070a0f&title_color=f15a24&text_color=e6edf3" || \
-          echo "Languages generation failed, will use previous version"
-
-      - name: Generate Streak Stats
-        id: streak
-        continue-on-error: true
-        run: |
-          STREAK_URL="https://streak-stats.demolab.com/?user=ecstra&hide_border=true&background=070a0f&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3"
-
-          curl -f -o dist/streak.svg "$STREAK_URL" || \
-          curl -f -o dist/streak.svg "https://nirzak-streak-stats.vercel.app/?user=ecstra&hide_border=true&background=070a0f&ring=f15a24&fire=f15a24&currStreakLabel=f15a24&sideLabels=e6edf3&currStreakNum=e6edf3&sideNums=e6edf3" || \
-          echo "Streak generation failed, will use previous version"
+          cd stats-generator
+          zig build
+          
+          # Generate the stats
+          ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos ecstra/github-readme-stats
+          
+          # Move them to the dist folder, renaming overview to stats.svg
+          cp overview.svg ../dist/stats.svg
+          cp languages.svg ../dist/languages.svg
+          cp streak.svg ../dist/streak.svg
 
       - name: Generate snake animation
         uses: Platane/snk/svg-only@v3
@@ -69,8 +64,6 @@ jobs:
           {
             "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "stats_status": "${{ steps.stats.outcome }}",
-            "languages_status": "${{ steps.languages.outcome }}",
-            "streak_status": "${{ steps.streak.outcome }}",
             "commit_sha": "${{ github.sha }}"
           }
           EOF
@@ -80,29 +73,15 @@ jobs:
         run: |
           git fetch origin output:output-branch || true
 
-          if [ ! -f dist/stats.svg ] || [ ! -s dist/stats.svg ]; then
-            if git show output-branch:stats.svg > dist/stats.svg 2>/dev/null && [ -s dist/stats.svg ]; then
-              echo "Using previous stats.svg"
-            else
-              rm -f dist/stats.svg
+          for file in stats languages streak; do
+            if [ ! -f "dist/${file}.svg" ] || [ ! -s "dist/${file}.svg" ]; then
+              if git show "output-branch:${file}.svg" > "dist/${file}.svg" 2>/dev/null && [ -s "dist/${file}.svg" ]; then
+                echo "Using previous ${file}.svg"
+              else
+                rm -f "dist/${file}.svg"
+              fi
             fi
-          fi
-
-          if [ ! -f dist/languages.svg ] || [ ! -s dist/languages.svg ]; then
-            if git show output-branch:languages.svg > dist/languages.svg 2>/dev/null && [ -s dist/languages.svg ]; then
-              echo "Using previous languages.svg"
-            else
-              rm -f dist/languages.svg
-            fi
-          fi
-
-          if [ ! -f dist/streak.svg ] || [ ! -s dist/streak.svg ]; then
-            if git show output-branch:streak.svg > dist/streak.svg 2>/dev/null && [ -s dist/streak.svg ]; then
-              echo "Using previous streak.svg"
-            else
-              rm -f dist/streak.svg
-            fi
-          fi
+          done
 
       - name: Verify all files exist
         run: |
@@ -126,6 +105,6 @@ jobs:
         with:
           target_branch: output
           build_dir: dist
-          commit_message: "Update graphs - ${{ steps.stats.outcome }}/${{ steps.languages.outcome }}/${{ steps.streak.outcome }}"
+          commit_message: "Update graphs - ${{ steps.stats.outcome }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
