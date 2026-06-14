@@ -23,17 +23,17 @@ jobs:
         run: mkdir -p dist
 
       - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: mlugg/setup-zig@v2
         with:
-          version: master # Uses the latest nightly to match your local 0.16.0+
+          version: 0.16.0
 
       - name: Checkout custom stats generator
         uses: actions/checkout@v4
         with:
           repository: ecstra/github-readme-stats
-          ref: master # Now correctly pulling from master branch!
+          ref: master 
           path: stats-generator
-          token: ${{ secrets.STATS_TOKEN }} # Required to clone the private repo
+          token: ${{ secrets.STATS_TOKEN }} # Needed to clone private repos
 
       - name: Generate GitHub Stats
         id: stats
@@ -110,6 +110,6 @@ jobs:
         with:
           target_branch: output
           build_dir: dist
-          commit_message: "Update graphs - ${{ steps.stats.outcome }}"
+          commit_message: "Update automated graphs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
