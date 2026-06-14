@@ -31,21 +31,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ecstra/github-readme-stats
-          ref: main # Make sure you've merged the 'anuraghazra-theme' branch to main!
+          ref: master # Now correctly pulling from master branch!
           path: stats-generator
+          token: ${{ secrets.STATS_TOKEN }} # Required to clone the private repo
 
       - name: Generate GitHub Stats
         id: stats
         continue-on-error: true
         env:
-          # Create a repository secret named STATS_TOKEN with a Personal Access Token
           GITHUB_TOKEN: ${{ secrets.STATS_TOKEN }}
+          EXCLUDE_REPOS: ${{ secrets.EXCLUDE_REPOS }}
         run: |
           cd stats-generator
           zig build
           
-          # Generate the stats
-          ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos ecstra/github-readme-stats
+          # Generates the stats. Securely reads comma-separated exclusions from secret.
+          ./zig-out/bin/github-stats \
+            --access-token $GITHUB_TOKEN \
+            --exclude-repos "$EXCLUDE_REPOS"
           
           # Move them to the dist folder, renaming overview to stats.svg
           cp overview.svg ../dist/stats.svg
