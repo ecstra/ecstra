@@ -54,6 +54,7 @@ jobs:
           
           # Move the unified output to the dist folder
           cp stats.svg ../dist/stats.svg
+          cp stats-mobile.svg ../dist/stats-mobile.svg
 
       - name: Generate snake animation
         uses: Platane/snk/svg-only@v3
@@ -76,7 +77,7 @@ jobs:
         run: |
           git fetch origin output:output-branch || true
 
-          for file in stats; do
+          for file in stats stats-mobile; do
             if [ ! -f "dist/${file}.svg" ] || [ ! -s "dist/${file}.svg" ]; then
               if git show "output-branch:${file}.svg" > "dist/${file}.svg" 2>/dev/null && [ -s "dist/${file}.svg" ]; then
                 echo "Using previous ${file}.svg"
@@ -91,7 +92,7 @@ jobs:
           echo "Checking generated files..."
           ls -lh dist/
 
-          for file in stats; do
+          for file in stats stats-mobile; do
             if [ ! -f "dist/${file}.svg" ]; then
               cat > "dist/${file}.svg" <<'PLACEHOLDER'
           <svg width="495" height="195" viewBox="0 0 495 195" xmlns="http://www.w3.org/2000/svg">
