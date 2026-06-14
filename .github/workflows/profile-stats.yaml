@@ -45,10 +45,12 @@ jobs:
           cd stats-generator
           zig build
           
-          # Generates the stats. Securely reads comma-separated exclusions from secret.
-          ./zig-out/bin/github-stats \
-            --access-token $GITHUB_TOKEN \
-            --exclude-repos "$EXCLUDE_REPOS"
+          # Only pass the exclude flag if the secret actually has text in it
+          if [ -z "$EXCLUDE_REPOS" ]; then
+            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN
+          else
+            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos "$EXCLUDE_REPOS"
+          fi
           
           # Move them to the dist folder, renaming overview to stats.svg
           cp overview.svg ../dist/stats.svg
