@@ -87,7 +87,7 @@
 <div align="center">
 
   <!-- GitHub Stats Monolith  -->
-  <img src="https://github.com/user-attachments/assets/0b60ba67-d166-458b-9cd2-4e2afd7e74b8" alt="GitHub Stats" />
+  <img src="https://github.com/user-attachments/assets/83807314-57db-47a4-af01-5d1b86be7d20" alt="GitHub Stats" />
 
 </div>
 
