@@ -47,9 +47,9 @@ jobs:
           
           # Only pass the exclude flag if the secret actually has text in it
           if [ -z "$EXCLUDE_REPOS" ]; then
-            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN
+            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-langs "Dart"
           else
-            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos "$EXCLUDE_REPOS"
+            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos "$EXCLUDE_REPOS" --exclude-langs "Dart"
           fi
           
           # Move the unified output to the dist folder
