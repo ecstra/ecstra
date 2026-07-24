@@ -40,19 +40,25 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.STATS_TOKEN }}
-          EXCLUDE_REPOS: ${{ secrets.EXCLUDE_REPOS }}
+          # Repository variables rather than secrets: neither of these is
+          # sensitive, and a secret cannot be read back, so the only way to
+          # find out what was excluded was to guess. Set them with
+          # `gh variable set EXCLUDE_REPOS` and `gh variable set EXCLUDE_LANGS`.
+          EXCLUDE_REPOS: ${{ vars.EXCLUDE_REPOS }}
+          EXCLUDE_LANGS: ${{ vars.EXCLUDE_LANGS }}
         run: |
           cd stats-generator
           zig build
-          
-          # Only pass the exclude flag if the secret actually has text in it
-          if [ -z "$EXCLUDE_REPOS" ]; then
-            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-langs "Dart"
-          else
-            ./zig-out/bin/github-stats --access-token $GITHUB_TOKEN --exclude-repos "$EXCLUDE_REPOS" --exclude-langs "Dart"
-          fi
-          
-          # Move the unified output to the dist folder
+
+          # Build the argument list so an unset variable passes no flag at all.
+          # Passing an empty --exclude-repos "" would exclude nothing but still
+          # look deliberate in the logs.
+          args=(--access-token "$GITHUB_TOKEN")
+          [ -n "$EXCLUDE_REPOS" ] && args+=(--exclude-repos "$EXCLUDE_REPOS")
+          [ -n "$EXCLUDE_LANGS" ] && args+=(--exclude-langs "$EXCLUDE_LANGS")
+
+          ./zig-out/bin/github-stats "${args[@]}"
+
           cp stats.svg ../dist/stats.svg
           cp stats-mobile.svg ../dist/stats-mobile.svg
 
